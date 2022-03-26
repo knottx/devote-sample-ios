@@ -1,2 +1,2 @@
-# devote-sample-ios
-Sample SwiftUI App
+# Devote
+Daily Tasks App (Sample SwiftUI App)

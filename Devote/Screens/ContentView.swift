@@ -9,52 +9,32 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    
+    @State var task: String = ""
+    
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
-
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
-        }
-    }
-
+    
     private func addItem() {
         withAnimation {
             let newItem = Item(context: viewContext)
+            newItem.id = UUID()
             newItem.timestamp = Date()
+            newItem.task = task
+            newItem.isCompleted = false
 
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+            task = ""
+            hideKeyboard()
         }
     }
 
@@ -65,21 +45,75 @@ struct ContentView: View {
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
     }
-}
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+    var body: some View {
+        NavigationView {
+            ZStack {
+                VStack {
+                    VStack(spacing: 16) {
+                        TextField("New Task", text: $task)
+                            .padding()
+                            .background(Color(UIColor.systemGray6))
+                            .cornerRadius(10)
+                        
+                        Button {
+                            addItem()
+                        } label: {
+                            Spacer()
+                            Text("SAVE")
+                            Spacer()
+                        }
+                        .padding()
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .background(task.isEmpty ? Color.gray : Color.pink)
+                        .cornerRadius(10)
+                        .disabled(task.isEmpty)
+
+                    } //: VStack
+                    .padding()
+                    
+                    List {
+                        ForEach(items) { item in
+                            VStack(alignment: .leading) {
+                                Text(item.task ?? "")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                
+                                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .onDelete(perform: deleteItems)
+                    } //: List
+                    .listStyle(.insetGrouped)
+                    .shadow(color: .black.opacity(0.3), radius: 12)
+                    .padding(.vertical, 0)
+                    .frame(maxWidth: 640)
+                } //: VStack
+            } //: ZStack
+            .onAppear {
+                UITableView.appearance().backgroundColor = .clear
+            }
+            .navigationTitle("Daily Tasks")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+            } //: Toolbar
+            .background(BackgroundImageView())
+            .background(backgroundGradient.ignoresSafeArea())
+        } //: NavigationView
+        .navigationViewStyle(.stack)
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
