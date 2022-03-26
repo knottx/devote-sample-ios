@@ -10,7 +10,7 @@ import CoreData
 
 struct ContentView: View {
     
-    @State var task: String = ""
+    @State private var showNewTaskItem: Bool = false
     
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -18,25 +18,6 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.id = UUID()
-            newItem.timestamp = Date()
-            newItem.task = task
-            newItem.isCompleted = false
-
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-            task = ""
-            hideKeyboard()
-        }
-    }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
@@ -54,30 +35,32 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                // Mark: - Main view
                 VStack {
-                    VStack(spacing: 16) {
-                        TextField("New Task", text: $task)
-                            .padding()
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(10)
-                        
-                        Button {
-                            addItem()
-                        } label: {
-                            Spacer()
-                            Text("SAVE")
-                            Spacer()
-                        }
-                        .padding()
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .background(task.isEmpty ? Color.gray : Color.pink)
-                        .cornerRadius(10)
-                        .disabled(task.isEmpty)
-
-                    } //: VStack
-                    .padding()
+                    // Mark: - Header
+                    Spacer(minLength: 80)
                     
+                    // Mark: - New task button
+                    Button {
+                        showNewTaskItem = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                        Text("New Task")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(gradient: .init(colors: [.pink, .blue]),
+                                       startPoint: .leading, endPoint: .trailing)
+                        .clipShape(Capsule())
+                    )
+                    .shadow(color: .black.opacity(0.25), radius: 8, x: 0, y: 4)
+
+                    
+                    // Mark: - Task
                     List {
                         ForEach(items) { item in
                             VStack(alignment: .leading) {
@@ -97,6 +80,18 @@ struct ContentView: View {
                     .padding(.vertical, 0)
                     .frame(maxWidth: 640)
                 } //: VStack
+                
+                // Mark: - New Task Item
+                if showNewTaskItem {
+                    BlankView()
+                        .onTapGesture {
+                            withAnimation {
+                                showNewTaskItem = false
+                            }
+                        }
+                    NewTaskItemView(isShowing: $showNewTaskItem)
+                }
+                
             } //: ZStack
             .onAppear {
                 UITableView.appearance().backgroundColor = .clear

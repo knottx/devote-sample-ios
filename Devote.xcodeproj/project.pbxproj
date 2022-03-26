@@ -19,6 +19,8 @@
 		8B04278C27EF56D2002C7198 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B04278B27EF56D2002C7198 /* Constant.swift */; };
 		8B04278E27EF5BEA002C7198 /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B04278D27EF5BEA002C7198 /* HideKeyboard.swift */; };
 		8B04279127EF6063002C7198 /* BackgroundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B04279027EF6063002C7198 /* BackgroundImageView.swift */; };
+		8B04279327EF670C002C7198 /* NewTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B04279227EF670C002C7198 /* NewTaskItemView.swift */; };
+		8B04279527EF6AE6002C7198 /* BlankView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B04279427EF6AE6002C7198 /* BlankView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		8B04278B27EF56D2002C7198 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		8B04278D27EF5BEA002C7198 /* HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
 		8B04279027EF6063002C7198 /* BackgroundImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImageView.swift; sourceTree = "<group>"; };
+		8B04279227EF670C002C7198 /* NewTaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskItemView.swift; sourceTree = "<group>"; };
+		8B04279427EF6AE6002C7198 /* BlankView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,7 @@
 				8B04276827EF2DCE002C7198 /* DevoteApp.swift */,
 				8B04278527EF2EA7002C7198 /* Utilities */,
 				8B04278427EF2E9E002C7198 /* Extensions */,
+				8B04278F27EF604E002C7198 /* Views */,
 				8B04278227EF2E7A002C7198 /* Screens */,
 				8B04277B27EF2E26002C7198 /* Sounds */,
 				8B04276C27EF2DCF002C7198 /* Assets.xcassets */,
@@ -103,7 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				8B04276A27EF2DCE002C7198 /* ContentView.swift */,
-				8B04278F27EF604E002C7198 /* Views */,
+				8B04279227EF670C002C7198 /* NewTaskItemView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -137,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				8B04279027EF6063002C7198 /* BackgroundImageView.swift */,
+				8B04279427EF6AE6002C7198 /* BlankView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -218,9 +224,11 @@
 				8B04279127EF6063002C7198 /* BackgroundImageView.swift in Sources */,
 				8B04276B27EF2DCE002C7198 /* ContentView.swift in Sources */,
 				8B04278C27EF56D2002C7198 /* Constant.swift in Sources */,
+				8B04279527EF6AE6002C7198 /* BlankView.swift in Sources */,
 				8B04277527EF2DCF002C7198 /* Devote.xcdatamodeld in Sources */,
 				8B04278E27EF5BEA002C7198 /* HideKeyboard.swift in Sources */,
 				8B04276927EF2DCE002C7198 /* DevoteApp.swift in Sources */,
+				8B04279327EF670C002C7198 /* NewTaskItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
