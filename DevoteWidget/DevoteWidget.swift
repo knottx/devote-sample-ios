@@ -40,9 +40,57 @@ struct SimpleEntry: TimelineEntry {
 
 struct DevoteWidgetEntryView : View {
     var entry: Provider.Entry
+    
+    @Environment(\.widgetFamily) var widgetFamily
+    
+    var fontStyle: Font {
+        if widgetFamily == .systemSmall {
+            return .system(.footnote, design: .rounded)
+        } else {
+            return .system(.headline, design: .rounded)
+        }
+    }
 
     var body: some View {
-        Text(entry.date, style: .time)
+//        Text(entry.date, style: .time)
+        GeometryReader { geometry in
+            ZStack {
+                backgroundGradient
+                
+                Image("rocket-small")
+                    .resizable()
+                    .scaledToFit()
+                
+                Image("logo")
+                    .resizable()
+                    .frame(width: widgetFamily != .systemSmall ? 56 : 36,
+                           height: widgetFamily != .systemSmall ? 56 : 36)
+                    .offset(x: (geometry.size.width / 2) - 20,
+                            y: (geometry.size.height / -2) + 20)
+                    .padding(.top, widgetFamily != .systemSmall ? 32 : 12)
+                    .padding(.trailing, widgetFamily != .systemSmall ? 32 : 12)
+                
+                HStack {
+                    Text("Just do it.")
+                        .foregroundColor(.white)
+                        .font(fontStyle)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .background(
+                            Color.black.opacity(0.5)
+                                .blendMode(.overlay)
+                        )
+                    .clipShape(Capsule())
+                    
+                    if widgetFamily != .systemSmall {
+                        Spacer()
+                    }
+                } //: HStack
+                .padding()
+                .offset(y: (geometry.size.height / 2) - 24)
+            } //: ZStack
+        } //: GeometryReader
     }
 }
 
@@ -54,14 +102,22 @@ struct DevoteWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             DevoteWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Devote Launcher")
+        .description("This is an example widget for personal task manager app.")
     }
 }
 
 struct DevoteWidget_Previews: PreviewProvider {
     static var previews: some View {
-        DevoteWidgetEntryView(entry: SimpleEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            DevoteWidgetEntryView(entry: SimpleEntry(date: Date()))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            
+            DevoteWidgetEntryView(entry: SimpleEntry(date: Date()))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+
+            DevoteWidgetEntryView(entry: SimpleEntry(date: Date()))
+                .previewContext(WidgetPreviewContext(family: .systemLarge))
+        }
     }
 }

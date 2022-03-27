@@ -1,2 +1,2 @@
 # Devote
-Daily Tasks App (Sample SwiftUI App)
+Personal task manager app (Sample SwiftUI App)
