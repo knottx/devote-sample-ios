@@ -13,6 +13,8 @@ struct NewTaskItemView: View {
     
     @Binding var isShowing: Bool
     
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+    
     @Environment(\.managedObjectContext) private var viewContext
     
     private func addItem() {
@@ -44,11 +46,15 @@ struct NewTaskItemView: View {
                     .foregroundColor(.pink)
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .padding()
-                    .background(Color(UIColor.systemGray6))
+                    .background(
+                        Color(isDarkMode ? .tertiarySystemBackground : .secondarySystemBackground)
+                    )
                     .cornerRadius(10)
                 
                 Button {
                     addItem()
+                    playSound("sound-ding", type: "mp3")
+                    feedback.notificationOccurred(.success)
                 } label: {
                     Spacer()
                     Text("SAVE")
@@ -56,6 +62,11 @@ struct NewTaskItemView: View {
                     Spacer()
                 }
                 .disabled(task.isEmpty)
+                .onTapGesture {
+                    if task.isEmpty {
+                        playSound("sound-tap", type: "mp3")
+                    }
+                }
                 .padding()
                 .font(.headline)
                 .foregroundColor(.white)
@@ -64,7 +75,9 @@ struct NewTaskItemView: View {
             } //: VStack
             .padding(.horizontal)
             .padding(.vertical, 20)
-            .background(Color.white)
+            .background(
+                Color(isDarkMode ? .secondarySystemBackground : .white)
+            )
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.65), radius: 24)
             .frame(maxWidth: 640)
